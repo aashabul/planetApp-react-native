@@ -5,6 +5,7 @@ import {
   Platform,
   StatusBar,
   FlatList,
+  Pressable,
 } from "react-native";
 import React from "react";
 import Text from "../components/text/text";
@@ -12,8 +13,9 @@ import PlanetHeader from "../components/planet-header";
 import { colors } from "../theme/colors";
 import { PLANET_LIST } from "../data/planet-list";
 import { spacing } from "../theme/spacing";
+import { AntDesign } from "@expo/vector-icons";
 
-export default function Home() {
+export default function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <PlanetHeader />
@@ -24,12 +26,20 @@ export default function Home() {
         renderItem={({ item }) => {
           const { name, color } = item;
           return (
-            <View style={styles.item}>
-              <View style={[styles.circle, { backgroundColor: color }]} />
-              <Text preset="h4" style={styles.itemName}>
-                {name}
-              </Text>
-            </View>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("Details", { planet: item });
+              }}
+              style={styles.item}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={[styles.circle, { backgroundColor: color }]} />
+                <Text preset="h4" style={styles.itemName}>
+                  {name}
+                </Text>
+              </View>
+              <AntDesign name="right" size={18} color="white" />
+            </Pressable>
           );
         }}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -49,6 +59,7 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     padding: spacing[4],
   },
   circle: {
